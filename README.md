@@ -1,4 +1,4 @@
-# Kilele Roasters ☕
+# Kilele Roasters 
 
 A Django-powered website for **Kilele Roasters**, a fictional specialty Kenyan coffee roastery based in Nairobi.
 
