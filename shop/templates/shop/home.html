@@ -1,0 +1,76 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<header class="hero">
+  <div class="container">
+    <h1>Coffee, sorted by how high it grew.</h1>
+    <p class="lead-serif">Five Kenyan farms, from 1,560 to 1,900 metres. Higher means slower cherry, brighter cup. Roasted in Nairobi twice a week.</p>
+    <svg class="ridge" viewBox="0 0 1000 250" role="img" aria-label="Our coffees plotted by farm elevation">
+      <polyline class="ridge-line" pathLength="1" points="0,205 {{ path }} 1000,205"/>
+      {% for p in points %}
+      <a href="{{ p.coffee.get_absolute_url }}">
+        <line x1="{{ p.x }}" y1="{{ p.y }}" x2="{{ p.x }}" y2="225" class="drop"/>
+        <circle cx="{{ p.x }}" cy="{{ p.y }}" r="9" class="peak"/>
+        <text x="{{ p.x }}" y="{{ p.y }}" dy="-18" text-anchor="middle" class="peak-elev">{{ p.coffee.elevation_m }} m</text>
+        <text x="{{ p.x }}" y="245" text-anchor="middle" class="peak-name">{{ p.coffee.name }}</text>
+      </a>
+      {% endfor %}
+    </svg>
+  </div>
+</header>
+
+<section id="coffees" class="section">
+  <div class="container">
+    <h2>This month's roasts</h2>
+    <div class="coffee-list">
+      {% for c in coffees %}
+      <a class="coffee-row" href="{{ c.get_absolute_url }}">
+        <span class="elev">{{ c.elevation_m }}<small> m</small></span>
+        <span class="who"><strong>{{ c.name }}</strong> <em>{{ c.region }}, {{ c.process|lower }}</em></span>
+        <span class="notes">{{ c.notes }}</span>
+        <span class="price">KES {{ c.price_kes }}</span>
+      </a>
+      {% empty %}
+      <p>No coffees yet. Run <code>python manage.py seed_coffees</code> or add one in the admin.</p>
+      {% endfor %}
+    </div>
+    <p class="fine">Prices are per 250 g bag. Delivery within Nairobi is free over KES 3,000.</p>
+  </div>
+</section>
+
+<section id="method" class="section method">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5"><h2>We roast less than you expect.</h2></div>
+      <div class="col-lg-7 prose">
+        <p>Kenyan coffee is already loud. Our roasts stop early so the fruit stays in the cup: nothing past the first crack's end, nothing smoky.</p>
+        <p>Every batch is cupped by two people before it ships. If they disagree, it doesn't.</p>
+        <p>Beans leave the roaster on Tuesday or Friday and reach you within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <h2>Order or ask.</h2>
+        <p class="prose">Tell us what you'd like and where to send it. Wholesale for cafes and offices is welcome too.</p>
+      </div>
+      <div class="col-lg-7">
+        {% for m in messages %}<div class="alert alert-success" role="status">{{ m }}</div>{% endfor %}
+        <form method="post" novalidate>{% csrf_token %}
+          {% for f in form %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>
+            {{ f }}
+            {% for e in f.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          {% endfor %}
+          <button class="btn btn-kilele" type="submit">Send message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

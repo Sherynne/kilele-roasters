@@ -1,0 +1,26 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ coffee.name }} | Kilele Roasters{% endblock %}
+{% block content %}
+<article class="section">
+  <div class="container detail">
+    <a class="back" href="{% url 'home' %}#coffees">All coffees</a>
+    <div class="row g-5 mt-1">
+      <div class="col-lg-6">
+        <div class="big-elev">{{ coffee.elevation_m }}<small> m</small></div>
+        <p class="fine">above sea level, {{ coffee.region }}</p>
+      </div>
+      <div class="col-lg-6">
+        <h1>{{ coffee.name }}</h1>
+        <p class="lead-serif">{{ coffee.notes }}</p>
+        <p class="prose">{{ coffee.story }}</p>
+        <dl class="spec">
+          <dt>Process</dt><dd>{{ coffee.process }}</dd>
+          <dt>Roast</dt><dd>{{ coffee.get_roast_display }}</dd>
+          <dt>250 g bag</dt><dd>KES {{ coffee.price_kes }}</dd>
+        </dl>
+        <a class="btn btn-kilele" href="{% url 'home' %}#contact">Order this coffee</a>
+      </div>
+    </div>
+  </div>
+</article>
+{% endblock %}
